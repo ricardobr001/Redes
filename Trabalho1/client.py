@@ -4,23 +4,22 @@
 from socket import *
 
 # Configurações para estabelecer a conexão com o Servidor
-serverHost = 'localhost'
-serverPort = 25000
+HOST = 'localhost'
+PORT = 25000
 
 # Mensagem que será levada ao Servidor em bytes
-message = [b'Ola server!!']
+message = input("Mensagem a ser enviada: ")
 
 # Criando o socket e conectando ao Servidor
 socket_object = socket(AF_INET, SOCK_STREAM)
-socket_object.connect((serverHost, serverPort))
+socket_object.connect((HOST, PORT))
 
 # Enviando a mensagem para o Servidor linha por linha
-for line in message:
-    socket_object.send(line)
+socket_object.sendall(message.encode())
 
-    # Após enviar a linha para o servidor, aguardamos uma resposta
-    data = socket_object.recv(1024)
-    print ('Cliente recebeu:', data)
+# Após enviar a linha para o servidor, aguardamos uma resposta
+data = socket_object.recv(1024)
+print ('Cliente recebeu:', data.decode())
 
 # Fechando a conexão
 socket_object.close()
