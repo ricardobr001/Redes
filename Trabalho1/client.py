@@ -1,4 +1,6 @@
 # Cliente utilizando a pilha TCP/IP
+#Versão python 3.5
+
 # Importando a biblioteca socket
 
 from socket import *

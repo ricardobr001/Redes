@@ -1,4 +1,6 @@
 # Servidor utilizando a pilha TCP/IP
+# versão python 3.5
+
 # Importando a biblioteca Socket
 
 from socket import *
