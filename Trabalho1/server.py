@@ -27,19 +27,20 @@ while True:
     # Aceitando a nova conexão e devolvendo o seu endereço
     conn, addr = socket_object.accept()
     print ('Server connected by', addr)
+    arquivo = open('backup.txt', 'w')
 
     while True:
         # Recebendo dados enviados pelo clientes
         data = conn.recv(1024)
-        maiuscula = data.decode()
-        maiuscula = maiuscula.upper()
-        data = maiuscula.encode()
+        texto = data.decode()
+        arquivo.write(texto)
 
         # Se não recebermos dados do cliente, paramos o laço
         if not data: break
 
         # Enviando de volta para o cliente uma resposta do Servidor
-        conn.sendall(data)
+        #conn.sendall(b'Salvando o arquivo\n')
 
     # Fechando a conexão estabelecida com o cliente após a resposta ser enviada
+    arquivo.close()
     conn.close()

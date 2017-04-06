@@ -10,7 +10,9 @@ HOST = 'localhost'
 PORT = 25000
 
 # Mensagem que será levada ao Servidor em bytes
-message = input("Mensagem a ser enviada: ")
+nome = input("Nome do arquivo a ser enviado: ")
+arquivo = open(nome, 'r')
+message = arquivo.read()
 
 # Criando o socket e conectando ao Servidor
 socket_object = socket(AF_INET, SOCK_STREAM)
@@ -18,10 +20,11 @@ socket_object.connect((HOST, PORT))
 
 # Enviando a mensagem para o Servidor linha por linha
 socket_object.sendall(message.encode())
+arquivo.close()
 
 # Após enviar a linha para o servidor, aguardamos uma resposta
-data = socket_object.recv(1024)
-print ('Cliente recebeu:', data.decode())
+#data = socket_object.recv(1024)
+print ('Cliente recebendo o arquivo', nome)
 
 # Fechando a conexão
 socket_object.close()
