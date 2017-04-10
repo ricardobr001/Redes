@@ -1,30 +1,72 @@
+# -*- coding: utf-8 -*-
 # Cliente utilizando a pilha TCP/IP
 #Versão python 3.5
 
 # Importando a biblioteca socket
+# Importando o objeto Arquivo
 
 from socket import *
+# from arquivo import Arquivo
 
 # Configurações para estabelecer a conexão com o Servidor
 HOST = 'localhost'
 PORT = 25000
 
-# Mensagem que será levada ao Servidor em bytes
-nome = input("Nome do arquivo a ser enviado: ")
-arquivo = open(nome, 'r')
-message = arquivo.read()
+# Menu com as opções possiveis
+print ('1 - Enviar um arquivo')
+print ('2 - Recuperar um arquivo')
 
-# Criando o socket e conectando ao Servidor
-socket_object = socket(AF_INET, SOCK_STREAM)
-socket_object.connect((HOST, PORT))
+# Lendo a opção
+opcao = input('Digite uma opção: ')
 
-# Enviando a mensagem para o Servidor linha por linha
-socket_object.sendall(message.encode())
-arquivo.close()
+if (opcao == '1'):
+    # Criando o socket e conectando ao Servidor
+    socket_object = socket(AF_INET, SOCK_STREAM)
+    socket_object.connect((HOST, PORT))
 
-# Após enviar a linha para o servidor, aguardamos uma resposta
-#data = socket_object.recv(1024)
-print ('Cliente recebendo o arquivo', nome)
+    # Enviando qual opção o cliente quer
+    socket_object.send(opcao.encode())
 
-# Fechando a conexão
-socket_object.close()
+    # Abrindo o arquivo
+    nome = input('Nome do arquivo a ser enviado: ')
+    arquivo = open(nome, 'r')
+    texto = arquivo.read()
+
+    # Enviando o arquivo para o Servidor
+    socket_object.sendall(texto.encode())
+    arquivo.close()
+
+    # Fechando a conexão
+    socket_object.close()
+
+elif (opcao == '2'):
+    # Criando o socket e conectando ao Servidor
+    socket_object = socket(AF_INET, SOCK_STREAM)
+    socket_object.connect((HOST, PORT))
+
+    # Enviando qual opção o cliente quer
+    socket_object.send(opcao.encode())
+
+    # Lendo o nome do arquivo
+    nome = input('Nome do arquivo a ser recebido: ')
+
+    # Enviando o nome do arquivo para o Servidor
+    socket_object.sendall(nome.encode())
+
+    # Abrindo o arquivo para escrita
+    arquivo = open('teste1.txt', 'w')
+
+    while True:
+        # Recebendo dados enviados pelo clientes
+        data = socket_object.recv(1024)
+        texto = data.decode()
+        arquivo.write(texto)
+
+        # Se não recebermos dados do cliente, paramos o laço
+        if not data: break
+    arquivo.close()
+
+    # Fechando a conexão
+    socket_object.close()
+else:
+    print ('Opção inválida!!')

@@ -1,9 +1,12 @@
+# -*- coding: utf-8 -*-
 # Servidor utilizando a pilha TCP/IP
 # versão python 3.5
 
 # Importando a biblioteca Socket
+# Importando o objeto Arquivo
 
 from socket import *
+# from arquivo import Arquivo
 
 # Criando nome do host (Usando o localhost)
 HOST = ''
@@ -27,20 +30,36 @@ while True:
     # Aceitando a nova conexão e devolvendo o seu endereço
     conn, addr = socket_object.accept()
     print ('Server connected by', addr)
-    arquivo = open('backup.txt', 'w')
 
-    while True:
+    # Recebendo a opção do cliente
+    data = conn.recv(1024)
+    opcao = data.decode()
+
+    if (opcao == '1'):
+        # Abrindo o arquivo para escrita
+        arquivo = open('backup.txt', 'w')
+
+        while True:
+            # Recebendo dados enviados pelo clientes
+            data = conn.recv(1024)
+            texto = data.decode()
+            arquivo.write(texto)
+
+            # Se não recebermos dados do cliente, paramos o laço
+            if not data: break
+
+    elif (opcao == '2'):
         # Recebendo dados enviados pelo clientes
         data = conn.recv(1024)
-        texto = data.decode()
-        arquivo.write(texto)
+        nome = data.decode()
 
-        # Se não recebermos dados do cliente, paramos o laço
-        if not data: break
+        # Abrindo o arquivo para leitura
+        arquivo = open(nome, 'r')
+        texto = arquivo.read()
 
-        # Enviando de volta para o cliente uma resposta do Servidor
-        #conn.sendall(b'Salvando o arquivo\n')
+        # Enviando o conteúdo do arquivo para o cliente
+        conn.sendall(texto.encode())
 
-    # Fechando a conexão estabelecida com o cliente após a resposta ser enviada
+    # Fechando a conexão estabelecida com o cliente e o arquivo
     arquivo.close()
     conn.close()
