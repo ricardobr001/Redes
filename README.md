@@ -1,1 +1,2 @@
-# Trabalhos da disciplina Redes de Computadores
+# Redes
+Trabalhos da disciplina Redes de Computadores
