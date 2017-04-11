@@ -6,27 +6,10 @@
 # Importando o objeto Arquivo
 
 from socket import *
-# from arquivo import Arquivo
+import threading
 
-# Criando nome do host (Usando o localhost)
-HOST = ''
-
-# Porta que será utilizada no socket para rodar a aplicação e o Servidor
-PORT = 25000
-
-# Criando um objeto do tipo socket com a pilha TCP/IP
-# AF_INET é o protocolo IP
-# SOCK_STREAM é o protocolo TCP
-# Combinando teremos a pilha TCP/IP
-socket_object = socket(AF_INET, SOCK_STREAM)
-
-# Vinculando o servidor ao número da porta escolhida
-socket_object.bind((HOST, PORT))
-
-# O socket irá aguardar por clientes, limitando a 5 clientes
-socket_object.listen(1)
-
-while True:
+# Definindo a thread
+def myThread (socket):
     # Aceitando a nova conexão e devolvendo o seu endereço
     conn, addr = socket_object.accept()
     print ('Server connected by', addr)
@@ -60,6 +43,30 @@ while True:
         # Enviando o conteúdo do arquivo para o cliente
         conn.sendall(texto.encode())
 
-    # Fechando a conexão estabelecida com o cliente e o arquivo
-    arquivo.close()
+        # Fechando a conexão estabelecida com o cliente e o arquivo
+        arquivo.close()
     conn.close()
+
+
+# from arquivo import Arquivo
+
+# Criando nome do host (Usando o localhost)
+HOST = ''
+
+# Porta que será utilizada no socket para rodar a aplicação e o Servidor
+PORT = 25000
+
+# Criando um objeto do tipo socket com a pilha TCP/IP
+# AF_INET é o protocolo IP
+# SOCK_STREAM é o protocolo TCP
+# Combinando teremos a pilha TCP/IP
+socket_object = socket(AF_INET, SOCK_STREAM)
+
+# Vinculando o servidor ao número da porta escolhida
+socket_object.bind((HOST, PORT))
+
+# O socket irá aguardar por clientes, limitando a 5 clientes
+socket_object.listen(1)
+
+while True:
+    myThread(socket_object)
