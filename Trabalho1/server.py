@@ -1,17 +1,13 @@
-# -*- coding: utf-8 -*-
 # Servidor utilizando a pilha TCP/IP
 # versão python 3.5
 
-# Importando a biblioteca Socket
-# Importando o objeto Arquivo
-
+# Importando a biblioteca Socket e threading
 from socket import *
 import threading
 
 # Definindo a thread
-def myThread (socket):
-    # Aceitando a nova conexão e devolvendo o seu endereço
-    conn, addr = socket_object.accept()
+def myThread (conn, addr):
+    # Devolvendo o endereço no qual está conectado
     print ('Server connected by', addr)
 
     # Recebendo a opção do cliente
@@ -20,7 +16,9 @@ def myThread (socket):
 
     if (opcao == '1'):
         # Abrindo o arquivo para escrita
-        arquivo = open('backup.txt', 'w')
+        data = conn.recv(1024)
+        nome = data.decode()
+        arquivo = open(nome, 'w')
 
         while True:
             # Recebendo dados enviados pelo clientes
@@ -47,9 +45,6 @@ def myThread (socket):
         arquivo.close()
     conn.close()
 
-
-# from arquivo import Arquivo
-
 # Criando nome do host (Usando o localhost)
 HOST = ''
 
@@ -66,7 +61,9 @@ socket_object = socket(AF_INET, SOCK_STREAM)
 socket_object.bind((HOST, PORT))
 
 # O socket irá aguardar por clientes, limitando a 5 clientes
-socket_object.listen(1)
+socket_object.listen()
 
 while True:
-    myThread(socket_object)
+    # Aceitando uma conexão
+    conn, addr = socket_object.accept()
+    myThread(conn, addr)

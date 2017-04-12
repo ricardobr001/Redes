@@ -1,12 +1,8 @@
-# -*- coding: utf-8 -*-
 # Cliente utilizando a pilha TCP/IP
-#Versão python 3.5
+# Versão python 3.5
 
 # Importando a biblioteca socket
-# Importando o objeto Arquivo
-
 from socket import *
-# from arquivo import Arquivo
 
 # Configurações para estabelecer a conexão com o Servidor
 HOST = 'localhost'
@@ -29,6 +25,8 @@ if (opcao == '1'):
 
     # Abrindo o arquivo
     nome = input('Nome do arquivo a ser enviado: ')
+    # Enviando o nome do arquivo
+    socket_object.send(nome.encode())
     arquivo = open(nome, 'r')
     texto = arquivo.read()
 
@@ -54,7 +52,7 @@ elif (opcao == '2'):
     socket_object.sendall(nome.encode())
 
     # Abrindo o arquivo para escrita
-    arquivo = open('teste1.txt', 'w')
+    arquivo = open(nome, 'w')
 
     while True:
         # Recebendo dados enviados pelo clientes
